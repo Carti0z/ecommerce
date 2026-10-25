@@ -68,9 +68,9 @@ export const authOptions: NextAuthOptions = {
           id: user.id,
           email: user.email,
           name: `${user.profile?.firstName || ""} ${user.profile?.lastName || ""}`.trim() || user.email,
-          roles: user.roles.map((ur) => ({
+          roles: user.roles.map((ur: any) => ({
             name: ur.role.name,
-            permissions: ur.role.permissions.map((rp) => rp.permission.key),
+            permissions: ur.role.permissions.map((rp: any) => rp.permission.key),
           })),
         }
       },
@@ -86,8 +86,8 @@ export const authOptions: NextAuthOptions = {
     },
     async session({ session, token }) {
       if (session.user) {
-        (session.user as any).id = token.id
-        (session.user as any).roles = token.roles
+        session.user.id = token.id as string
+        session.user.roles = token.roles as any
       }
       return session
     },

@@ -10,16 +10,17 @@ const updateItemSchema = z.object({
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions)
     const body = await request.json()
     const data = updateItemSchema.parse(body)
+    const { id } = await params
 
     // Get cart item
     const cartItem = await prisma.cartItem.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         cart: true,
         product: {
@@ -61,7 +62,7 @@ export async function PATCH(
 
     // Update quantity
     await prisma.cartItem.update({
-      where: { id: params.id },
+      where: { id },
       data: { quantity: data.quantity },
     })
 
@@ -82,14 +83,15 @@ export async function PATCH(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions)
+    const { id } = await params
 
     // Get cart item
     const cartItem = await prisma.cartItem.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: { cart: true },
     })
 
@@ -111,7 +113,7 @@ export async function DELETE(
 
     // Delete cart item
     await prisma.cartItem.delete({
-      where: { id: params.id },
+      where: { id },
     })
 
     await prisma.cart.update({

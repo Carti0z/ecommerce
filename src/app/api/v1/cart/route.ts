@@ -108,7 +108,7 @@ export async function GET(request: NextRequest) {
 
     // Calculate totals
     let subtotal = 0
-    const items = cart.items.map((item) => {
+    const items = cart.items.map((item: any) => {
       const price = item.variant?.priceOverride || item.product.basePrice
       const lineTotal = parseFloat(price.toString()) * item.quantity
       subtotal += lineTotal
@@ -137,7 +137,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       items,
       subtotal,
-      itemCount: items.reduce((sum, item) => sum + item.quantity, 0),
+      itemCount: items.reduce((sum: number, item: any) => sum + item.quantity, 0),
     })
   } catch (error) {
     console.error("Error fetching cart:", error)

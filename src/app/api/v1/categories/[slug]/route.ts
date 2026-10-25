@@ -10,11 +10,12 @@ const querySchema = z.object({
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
     const { searchParams } = new URL(request.url)
     const query = querySchema.parse(Object.fromEntries(searchParams))
+    const { slug } = await params
 
     const page = parseInt(query.page)
     const limit = parseInt(query.limit)
@@ -22,7 +23,7 @@ export async function GET(
 
     // Get category
     const category = await prisma.category.findUnique({
-      where: { slug: params.slug, isActive: true },
+      where: { slug, isActive: true },
       include: {
         parent: true,
         children: {
@@ -40,7 +41,7 @@ export async function GET(
     }
 
     // Get category IDs (including subcategories)
-    const categoryIds = [category.id, ...category.children.map((c) => c.id)]
+    const categoryIds = [category.id, ...category.children.map((c: any) => c.id)]
 
     // Build order by
     let orderBy: any = {}
@@ -101,7 +102,7 @@ export async function GET(
 
     // Calculate average rating
     const productsWithRating = await Promise.all(
-      products.map(async (product) => {
+      products.map(async (product: any) => {
         const avgRating = await prisma.productReview.aggregate({
           where: {
             productId: product.id,

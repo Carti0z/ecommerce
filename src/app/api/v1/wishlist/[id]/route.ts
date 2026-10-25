@@ -5,10 +5,11 @@ import { authOptions } from "@/lib/auth"
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions)
+    const { id } = await params
 
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
@@ -16,7 +17,7 @@ export async function DELETE(
 
     // Get wishlist item
     const wishlistItem = await prisma.wishlistItem.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: { wishlist: true },
     })
 
@@ -31,7 +32,7 @@ export async function DELETE(
 
     // Delete wishlist item
     await prisma.wishlistItem.delete({
-      where: { id: params.id },
+      where: { id },
     })
 
     return NextResponse.json({ success: true })

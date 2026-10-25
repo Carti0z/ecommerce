@@ -99,7 +99,7 @@ export async function GET(request: NextRequest) {
 
     // Calculate average rating for each product
     const productsWithRating = await Promise.all(
-      products.map(async (product) => {
+      products.map(async (product: any) => {
         const avgRating = await prisma.productReview.aggregate({
           where: {
             productId: product.id,

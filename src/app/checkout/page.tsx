@@ -25,7 +25,7 @@ export default function CheckoutPage() {
 
     // Shipping
     recipientName: "",
-    phone: "",
+    shippingPhone: "",
     country: "United States",
     state: "",
     city: "",
@@ -85,7 +85,7 @@ export default function CheckoutPage() {
     if (currentStep === 2) {
       return (
         formData.recipientName &&
-        formData.phone &&
+        formData.shippingPhone &&
         formData.country &&
         formData.state &&
         formData.city &&
@@ -130,7 +130,7 @@ export default function CheckoutPage() {
           customerPhone: formData.phone,
           shippingAddress: {
             recipientName: formData.recipientName,
-            phone: formData.phone,
+            phone: formData.shippingPhone,
             country: formData.country,
             state: formData.state,
             city: formData.city,
@@ -237,12 +237,12 @@ export default function CheckoutPage() {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="phone">Phone Number</Label>
+                    <Label htmlFor="shippingPhone">Phone Number</Label>
                     <Input
-                      id="phone"
+                      id="shippingPhone"
                       type="tel"
-                      value={formData.phone}
-                      onChange={(e) => handleInputChange("phone", e.target.value)}
+                      value={formData.shippingPhone}
+                      onChange={(e) => handleInputChange("shippingPhone", e.target.value)}
                       placeholder="+1 (555) 000-0000"
                     />
                   </div>
@@ -386,7 +386,7 @@ export default function CheckoutPage() {
                     <h3 className="font-semibold mb-2">Contact</h3>
                     <p className="text-sm text-muted-foreground">
                       {formData.email}<br />
-                      {formData.phone}
+                      {formData.shippingPhone}
                     </p>
                   </div>
 

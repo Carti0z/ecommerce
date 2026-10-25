@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
     const data = createOrderSchema.parse(body)
 
     // Start transaction
-    const result = await prisma.$transaction(async (tx) => {
+    const result = await prisma.$transaction(async (tx: any) => {
       // Generate order number
       const randomSuffix = randomBytes(5).toString("hex").toUpperCase()
       const orderNumber = `ORD-${Date.now()}-${randomSuffix}`

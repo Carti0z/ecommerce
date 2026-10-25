@@ -45,7 +45,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ items: [] })
     }
 
-    const items = wishlist.items.map((item) => {
+    const items = wishlist.items.map((item: any) => {
       const price = item.variant?.priceOverride || item.product.basePrice
       const availableStock = item.variant
         ? item.variant.inventory?.quantityOnHand || 0
